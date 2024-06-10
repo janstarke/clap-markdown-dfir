@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.0] - 2024-06-10
 
- * merged 
+ * merged features from <https://github.com/getgrit/clap-markdown>
+ * merged features from <https://github.com/keturiosakys/clap-markdown.git>
 
 ## [0.1.3] - 2022-12-28
 
