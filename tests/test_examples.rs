@@ -7,7 +7,7 @@ fn test_example_complex_app() {
     }
 
     assert_eq!(
-        clap_markdown::help_markdown::<complex_app::Cli>(),
+        clap_markdown_dfir::help_markdown::<complex_app::Cli>(),
         include_str!("../docs/examples/complex-app.md")
     );
 }

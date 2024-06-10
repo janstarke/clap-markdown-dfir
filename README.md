@@ -20,7 +20,7 @@ struct Cli {
     name: String,
 }
 
-let markdown: String = clap_markdown::help_markdown::<Cli>();
+let markdown: String = clap_markdown_dfir::help_markdown::<Cli>();
 ```
 
 **Generated Markdown Examples:**
@@ -42,6 +42,7 @@ and viewed as online documentation.
 
   ```rust
   use clap::Parser;
+  use clap_markdown_dfir::MarkdownOptions;
 
   #[derive(Parser)]
   struct Cli {
@@ -54,7 +55,7 @@ and viewed as online documentation.
 
       // Invoked as: `$ my-app --markdown-help`
       if args.markdown_help {
-          clap_markdown::print_help_markdown::<Cli>();
+          clap_markdown_dfir::print_help_markdown::<Cli>(MarkdownOptions::default());
       }
   }
   ```
