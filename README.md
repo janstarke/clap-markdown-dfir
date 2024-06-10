@@ -1,10 +1,10 @@
 # clap-markdown
 
-[![Crates.io](https://img.shields.io/crates/v/clap-markdown.svg)](https://crates.io/crates/clap-markdown)
-![License](https://img.shields.io/crates/l/clap-markdown.svg)
-[![Documentation](https://docs.rs/clap-markdown/badge.svg)](https://docs.rs/clap-markdown)
+[![Crates.io](https://img.shields.io/crates/v/clap-markdown-dfir.svg)](https://crates.io/crates/clap-markdown-dfir)
+![License](https://img.shields.io/crates/l/clap-markdown-dfir.svg)
+[![Documentation](https://docs.rs/clap-markdown-dfir/badge.svg)](https://docs.rs/clap-markdown-dfir)
 
-#### [API Documentation](https://docs.rs/clap-markdown) | [Changelog](./docs/CHANGELOG.md) | [Contributing](#contributing)
+#### [API Documentation](https://docs.rs/clap-markdown-dfir) | [Changelog](./docs/CHANGELOG.md) | [Contributing](#contributing)
 
 Automatically generate Markdown documentation for
 [`clap`](https://crates.io/crates/clap) command-line tools.
