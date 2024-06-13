@@ -343,7 +343,7 @@ fn build_command_markdown(
 
     let non_pos: Vec<_> = command
         .get_arguments()
-        .filter(|arg| !arg.is_positional())
+        .filter(|arg| !arg.is_positional() && !arg.is_hide_set())
         .collect();
 
     if !non_pos.is_empty() {
