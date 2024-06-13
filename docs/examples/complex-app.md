@@ -21,6 +21,8 @@ An example command-line tool
 
 * `<NAME>` — Optional name to operate on
 
+   Longer description
+
 ###### **Options:**
 
 * `-c`, `--config <FILE>` — Sets a custom config file
@@ -34,6 +36,8 @@ An example command-line tool
   - `remote`
 
 * `-d`, `--debug` — Turn debugging information on
+
+   Repeat this option to see more and more debug information.
 
 
 
