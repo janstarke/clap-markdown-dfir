@@ -104,7 +104,7 @@ fn write_help_markdown(
     // build_table_of_contents_html(buffer, Vec::new(), command, 0).unwrap();
     // writeln!(buffer, "</ul></div>").unwrap();
 
-    if ! options.disable_toc {
+    if !options.disable_toc {
         writeln!(buffer, "**Command Overview:**\n").unwrap();
 
         build_table_of_contents_markdown(buffer, Vec::new(), command, 0)
@@ -261,11 +261,7 @@ fn build_command_markdown(
     }
     */
 
-    writeln!(
-        buffer,
-        "## `{}`\n",
-        command_path.join(" "),
-    )?;
+    writeln!(buffer, "## `{}`\n", command_path.join(" "),)?;
 
     if let Some(long_about) = command.get_long_about() {
         writeln!(buffer, "{}\n", long_about)?;
@@ -316,15 +312,12 @@ fn build_command_markdown(
 
             let title_name = get_canonical_name(subcommand);
 
-            writeln!(
-                buffer,
-                "* `{}` — {}",
-                title_name,
-                match subcommand.get_about() {
-                    Some(about) => about.to_string(),
-                    None => String::new(),
-                }
-            )?;
+            writeln!(buffer, "* `{}` — {}", title_name, match subcommand
+                .get_about()
+            {
+                Some(about) => about.to_string(),
+                None => String::new(),
+            })?;
         }
 
         writeln!(buffer)?;
