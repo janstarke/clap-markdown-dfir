@@ -104,7 +104,7 @@ fn write_help_markdown(
     // build_table_of_contents_html(buffer, Vec::new(), command, 0).unwrap();
     // writeln!(buffer, "</ul></div>").unwrap();
 
-    if ! options.disable_toc {
+    if !options.disable_toc {
         writeln!(buffer, "**Command Overview:**\n").unwrap();
 
         build_table_of_contents_markdown(buffer, Vec::new(), command, 0)
@@ -261,11 +261,7 @@ fn build_command_markdown(
     }
     */
 
-    writeln!(
-        buffer,
-        "## `{}`\n",
-        command_path.join(" "),
-    )?;
+    writeln!(buffer, "## `{}`\n", command_path.join(" "),)?;
 
     if let Some(long_about) = command.get_long_about() {
         writeln!(buffer, "{}\n", long_about)?;
@@ -316,15 +312,12 @@ fn build_command_markdown(
 
             let title_name = get_canonical_name(subcommand);
 
-            writeln!(
-                buffer,
-                "* `{}` — {}",
-                title_name,
-                match subcommand.get_about() {
-                    Some(about) => about.to_string(),
-                    None => String::new(),
-                }
-            )?;
+            writeln!(buffer, "* `{}` — {}", title_name, match subcommand
+                .get_about()
+            {
+                Some(about) => about.to_string(),
+                None => String::new(),
+            })?;
         }
 
         writeln!(buffer)?;
@@ -425,8 +418,11 @@ fn write_arg_markdown(buffer: &mut String, arg: &clap::Arg) -> fmt::Result {
         },
     }
 
-    if let Some(help) = arg.get_help() {
-        writeln!(buffer, " — {help}")?;
+    if let Some(help) = arg.get_long_help() {
+        // TODO: Parse formatting in the string
+        buffer.push_str(&indent(&help.to_string(), " — ", "   "))
+    } else if let Some(short_help) = arg.get_help() {
+        writeln!(buffer, " — {short_help}")?;
     } else {
         writeln!(buffer)?;
     }
@@ -516,4 +512,45 @@ fn get_canonical_name(command: &clap::Command) -> String {
         .or_else(|| command.get_bin_name())
         .map(|name| name.to_owned())
         .unwrap_or_else(|| command.get_name().to_owned())
+}
+
+/// Indents non-empty lines. The output always ends with a newline.
+fn indent(s: &str, first: &str, rest: &str) -> String {
+    if s.is_empty() {
+        // For consistency. It's easiest to always add a newline at the end, and
+        // there's little reason not to.
+        return "\n".to_string();
+    }
+    let mut result = String::new();
+    let mut first_line = true;
+
+    for line in s.lines() {
+        if !line.is_empty() {
+            result.push_str(if first_line { first } else { rest });
+            result.push_str(line);
+            first_line = false;
+        }
+        result.push('\n');
+    }
+    result
+}
+
+#[cfg(test)]
+mod test {
+    use pretty_assertions::assert_eq;
+
+    #[test]
+    fn test_indent() {
+        use super::indent;
+        assert_eq!(
+            &indent("Header\n\nMore info", "___", "~~~~"),
+            "___Header\n\n~~~~More info\n"
+        );
+        assert_eq!(
+            &indent("Header\n\nMore info\n", "___", "~~~~"),
+            &indent("Header\n\nMore info", "___", "~~~~"),
+        );
+        assert_eq!(&indent("", "___", "~~~~"), "\n");
+        assert_eq!(&indent("\n", "___", "~~~~"), "\n");
+    }
 }
