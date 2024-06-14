@@ -104,7 +104,7 @@ fn write_help_markdown(
     // build_table_of_contents_html(buffer, Vec::new(), command, 0).unwrap();
     // writeln!(buffer, "</ul></div>").unwrap();
 
-    if ! options.disable_toc {
+    if !options.disable_toc {
         writeln!(buffer, "**Command Overview:**\n").unwrap();
 
         build_table_of_contents_markdown(buffer, Vec::new(), command, 0)
@@ -261,11 +261,7 @@ fn build_command_markdown(
     }
     */
 
-    writeln!(
-        buffer,
-        "## `{}`\n",
-        command_path.join(" "),
-    )?;
+    writeln!(buffer, "## `{}`\n", command_path.join(" "),)?;
 
     if let Some(long_about) = command.get_long_about() {
         writeln!(buffer, "{}\n", long_about)?;
@@ -316,15 +312,12 @@ fn build_command_markdown(
 
             let title_name = get_canonical_name(subcommand);
 
-            writeln!(
-                buffer,
-                "* `{}` — {}",
-                title_name,
-                match subcommand.get_about() {
-                    Some(about) => about.to_string(),
-                    None => String::new(),
-                }
-            )?;
+            writeln!(buffer, "* `{}` — {}", title_name, match subcommand
+                .get_about()
+            {
+                Some(about) => about.to_string(),
+                None => String::new(),
+            })?;
         }
 
         writeln!(buffer)?;
@@ -350,7 +343,7 @@ fn build_command_markdown(
 
     let non_pos: Vec<_> = command
         .get_arguments()
-        .filter(|arg| !arg.is_positional())
+        .filter(|arg| !arg.is_positional() && !arg.is_hide_set())
         .collect();
 
     if !non_pos.is_empty() {
@@ -384,9 +377,6 @@ fn build_command_markdown(
 }
 
 fn write_arg_markdown(buffer: &mut String, arg: &clap::Arg) -> fmt::Result {
-    // Markdown list item
-    write!(buffer, "* ")?;
-
     let value_name: String = match arg.get_value_names() {
         // TODO: What if multiple names are provided?
         Some([name, ..]) => name.as_str().to_owned(),
@@ -396,6 +386,8 @@ fn write_arg_markdown(buffer: &mut String, arg: &clap::Arg) -> fmt::Result {
         None => arg.get_id().to_string().to_ascii_uppercase(),
     };
 
+    // Markdown list item
+    write!(buffer, "* ")?;
     match (arg.get_short(), arg.get_long()) {
         (Some(short), Some(long)) => {
             if arg.get_action().takes_values() {
@@ -462,7 +454,11 @@ fn write_arg_markdown(buffer: &mut String, arg: &clap::Arg) -> fmt::Result {
         .filter(|pv| !pv.is_hide_set())
         .collect();
 
-    if !possible_values.is_empty() {
+    // Print possible values for options that take a value, but not for flags
+    // that can only be either present or absent and do not take a value.
+    if !possible_values.is_empty()
+        && !matches!(arg.get_action(), clap::ArgAction::SetTrue)
+    {
         let any_have_help: bool =
             possible_values.iter().any(|pv| pv.get_help().is_some());
 
